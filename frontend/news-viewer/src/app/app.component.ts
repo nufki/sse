@@ -7,10 +7,23 @@ interface NewsItem {
   timestamp: string;
 }
 
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatCardModule } from '@angular/material/card';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule} from "@angular/material/divider";
+
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    MatToolbarModule,
+    MatCardModule,
+    MatProgressBarModule,
+    MatIconModule,
+    MatDividerModule,
+  ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
