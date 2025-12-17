@@ -1,5 +1,7 @@
-package ch.innuvation.sse;
+package ch.innuvation.sse.controller;
 
+import ch.innuvation.sse.model.NewsItem;
+import ch.innuvation.sse.service.NewsApiClient;
 import jakarta.annotation.PostConstruct;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

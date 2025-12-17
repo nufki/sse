@@ -1,5 +1,7 @@
-package ch.innuvation.sse;
+package ch.innuvation.sse.service;
 
+import ch.innuvation.sse.model.HeadlinesResponse;
+import ch.innuvation.sse.model.NewsItem;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;

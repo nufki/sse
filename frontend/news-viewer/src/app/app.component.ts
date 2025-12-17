@@ -35,10 +35,25 @@ export class AppComponent implements OnInit, OnDestroy {
     };
 
     this.eventSource.addEventListener('NEWS', (event) => {
-      const news: NewsItem = JSON.parse(event.data);
-      this.newsItems.unshift(news);
-      this.newsItems = this.newsItems.slice(0, 20); // Keep last 20
+      const news: NewsItem = JSON.parse((event as MessageEvent).data);
+
+      // normalize timestamp to Date for sorting
+      const normalized: NewsItem = {
+        ...news,
+        timestamp: news.timestamp
+      };
+
+      this.newsItems = [normalized, ...this.newsItems];
+
+      // sort descending (newest first)
+      this.newsItems.sort(
+        (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+      );
+
+      // keep last 20
+      this.newsItems = this.newsItems.slice(0, 20);
     });
+
 
     this.eventSource.onerror = () => {
       this.connected = false;
