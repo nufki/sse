@@ -1,0 +1,13 @@
+<div class="container">
+  <h1>Live News Stream</h1>
+  <div class="news-list">
+    <div *ngFor="let news of newsItems; trackBy: trackByTitle"
+         class="news-item" [class.new]="isNew(news)">
+      <h3>{{news.title}}</h3>
+      <p>{{news.content}}</p>
+      <small>{{news.timestamp | date:'short'}}</small>
+    </div>
+  </div>
+  <div *ngIf="!connected" class="status disconnect">Connecting...</div>
+  <div *ngIf="connected" class="status connected">Live</div>
+</div>

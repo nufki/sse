@@ -1,0 +1,13 @@
+.container { max-width: 800px; margin: 0 auto; padding: 20px; }
+.news-list { display: flex; flex-direction: column; gap: 15px; }
+.news-item {
+  border: 1px solid #ddd; border-radius: 8px; padding: 20px;
+  background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.news-item.new { border-left: 4px solid #007bff; animation: pulse 2s; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(0,123,255,0.7); } 70% { box-shadow: 0 0 0 10px rgba(0,123,255,0); } }
+.news-item h3 { margin: 0 0 10px 0; color: #333; }
+.news-item p { margin: 0 0 10px 0; color: #666; }
+.status { padding: 10px; border-radius: 20px; font-weight: bold; text-align: center; }
+.status.connected { background: #d4edda; color: #155724; }
+.status.disconnect { background: #f8d7da; color: #721c24; }
