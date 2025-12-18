@@ -19,9 +19,9 @@
   padding: 12px 4px;
 }
 
-.news-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+.news-column {
+  display: flex;
+  flex-direction: column;
   gap: 16px;
 }
 
