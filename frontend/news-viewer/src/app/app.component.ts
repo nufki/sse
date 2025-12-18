@@ -94,11 +94,8 @@ export class AppComponent implements OnInit, OnDestroy {
     fetch('/config/polling-interval')
       .then(r => r.json())
       .then(value => {
-        if (typeof value === 'number') {
-          this.pollingInterval = value;
-        }
-      })
-      .catch(() => {});
+        this.pollingInterval = value.pollingIntervalSeconds;  // 30
+      });
   }
 
   changeInterval(seconds: number) {

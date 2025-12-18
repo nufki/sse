@@ -10,6 +10,8 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -19,9 +21,9 @@ public class NewsController {
 
     private static final Logger log = LoggerFactory.getLogger(NewsController.class);
 
-    private final SseEmitter sseEmitter = new SseEmitter(Long.MAX_VALUE);
     private final NewsApiClient newsApiClient;
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    private final List<SseEmitter> emitters = new CopyOnWriteArrayList<>(); // Thread-safe
 
     public NewsController(NewsApiClient newsApiClient) {
         this.newsApiClient = newsApiClient;
@@ -30,16 +32,17 @@ public class NewsController {
     @PostConstruct
     public void initNewsPolling() {
         log.info("Initializing news polling");
-        scheduleNextPoll(0); // start immediately
+        scheduleNextPoll(0);
     }
 
     private void scheduleNextPoll(long delaySeconds) {
         scheduler.schedule(() -> {
             long currentInterval = newsApiClient.getPollingIntervalSeconds();
-            log.info("Running news poll (interval={}s)", currentInterval);
+            log.info("Running news poll (interval={}s, {} clients)", currentInterval, emitters.size());
             try {
                 List<NewsItem> headlines = newsApiClient.fetchTopHeadlines();
-                log.info("Dispatching {} headlines to SSE clients", headlines.size());
+                log.info("Dispatching {} headlines to {} SSE clients", headlines.size(), emitters.size());
+                // For each headline → calls dispatchNewsItem(item)
                 headlines.forEach(this::dispatchNewsItem);
             } catch (Exception e) {
                 log.error("Error while polling or dispatching news", e);
@@ -53,19 +56,39 @@ public class NewsController {
 
     @GetMapping("/news")
     public SseEmitter getNews() {
-        log.info("Client connected to /news SSE stream");
-        return sseEmitter;
+        SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
+        log.info("Client connected to /news SSE stream (total clients: {})", emitters.size() + 1);
+
+        emitters.add(emitter);
+
+        emitter.onCompletion(() -> {
+            emitters.remove(emitter);
+            log.info("Client disconnected (remaining: {})", emitters.size());
+        });
+        emitter.onTimeout(() -> {
+            emitters.remove(emitter);
+            log.info("Client timeout (remaining: {})", emitters.size());
+        });
+        emitter.onError((ex) -> {
+            emitters.remove(emitter);
+            log.warn("Client error", ex);
+        });
+
+        return emitter;
     }
 
     private void dispatchNewsItem(NewsItem item) {
-        try {
-            sseEmitter.send(SseEmitter.event()
-                    .name("NEWS")
-                    .data(item));
-        } catch (IOException e) {
-            log.warn("Error sending SSE event, completing emitter", e);
-            sseEmitter.complete();
-        }
+        emitters.forEach(emitter -> {  // 1. Loop all active clients
+            try {
+                emitter.send(SseEmitter.event()  // 2. Send formatted SSE event
+                        .name("NEWS")
+                        .data(item));            // 3. With news headline data → Broadcasts to all clients → every connected browser gets the update
+
+            } catch (IOException e) {            // 4. Remove dead clients → Handles disconnects → removes emitters that can't receive
+                log.debug("Failed to send to client, removing");
+                emitter.complete();
+            }
+        });
     }
 
     @PostMapping("/config/polling-interval")
@@ -78,7 +101,12 @@ public class NewsController {
     }
 
     @GetMapping("/config/polling-interval")
-    public long getPollingInterval() {
-        return newsApiClient.getPollingIntervalSeconds();
+    public Map<String, Long> getPollingInterval() {
+        return Map.of("pollingIntervalSeconds", newsApiClient.getPollingIntervalSeconds());
+    }
+
+    @GetMapping("/clients")
+    public Map<String, Integer> getClientCount() {
+        return Map.of("activeClients", emitters.size());
     }
 }

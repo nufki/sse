@@ -24,3 +24,43 @@ A minimal **Angular** frontend (served as static content by Spring Boot) consume
 - JDK 21+
 - Node.js + npm
 - Angular CLI (for local development):
+
+## API Calls
+
+- Globally set interval:
+
+  ```bash
+  curl -X POST "localhost:8085/config/polling-interval?seconds=30"
+  ```
+
+- Fetch current poll interval:
+
+  ```bash
+  curl "localhost:8085/config/polling-interval"
+  ```
+
+- Fetch number of active client sessions:
+
+  ```bash
+  curl "localhost:8085/clients"
+  ```
+---
+
+
+# Load test queries..
+  ```bash
+    # List all curl processes hitting 8085/news
+    ps aux | grep "[c]url.*8085/news"
+    
+    # OR count them
+    ps aux | grep -c "[c]url.*8085/news"
+    
+    # Detailed list with PIDs
+    pgrep -f "curl.*8085/news" -l
+    
+    # Watch in real-time
+    watch -n 1 'ps aux | grep "[c]url.*8085/news" | wc -l'
+    
+    # Kill them all
+    pkill -f "curl.*8085/news"    
+  ```
