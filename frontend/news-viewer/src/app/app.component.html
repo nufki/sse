@@ -1,5 +1,17 @@
 <mat-toolbar color="primary">
   <span>Live News Stream</span>
+
+  <span class="spacer"></span>
+
+  <mat-form-field appearance="outline" class="interval-field">
+    <mat-label>Interval (s)</mat-label>
+    <mat-select [value]="pollingInterval"
+                (selectionChange)="changeInterval($event.value)">
+      <mat-option *ngFor="let s of intervals" [value]="s">
+        {{ s }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 </mat-toolbar>
 
 <div class="page">

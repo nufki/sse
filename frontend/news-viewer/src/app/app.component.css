@@ -44,3 +44,11 @@
 .news-text {
   margin-top: 12px;
 }
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.interval-field {
+  width: 140px;
+}
