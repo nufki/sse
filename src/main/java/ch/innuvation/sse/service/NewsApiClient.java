@@ -1,29 +1,44 @@
 package ch.innuvation.sse.service;
 
+import ch.innuvation.sse.model.Article;
 import ch.innuvation.sse.model.HeadlinesResponse;
 import ch.innuvation.sse.model.NewsItem;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClient;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class NewsApiClient {
-    @Value("${newsapi.key}")
-    private String apiKey;
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestClient newsApiRestClient;
+
+    public NewsApiClient(RestClient newsApiRestClient) {
+        this.newsApiRestClient = newsApiRestClient;
+    }
 
     public List<NewsItem> fetchTopHeadlines() {
-        String url = "https://newsapi.org/v2/top-headlines?country=us&apiKey=" + apiKey;
+        HeadlinesResponse response = newsApiRestClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/top-headlines")
+                        .queryParam("country", "us")
+                        .build())
+                .retrieve()
+                .body(HeadlinesResponse.class);
 
-        HeadlinesResponse response = restTemplate.getForObject(url, HeadlinesResponse.class);
-        return response.getArticles().stream()
-                .map(article -> new NewsItem(article.getTitle(),
-                        article.getDescription() != null ? article.getDescription() : "",
-                        article.getPublishedAt()))
-                .collect(Collectors.toList());
+        if (response == null || response.getArticles() == null) {
+            return List.of();
+        }
+
+        List<NewsItem> list = new ArrayList<>();
+        for (Article article : response.getArticles()) {
+            list.add(new NewsItem(
+                    article.getTitle(),
+                    article.getDescription() != null ? article.getDescription() : "",
+                    article.getPublishedAt()
+            ));
+        }
+        return list;
     }
 }
