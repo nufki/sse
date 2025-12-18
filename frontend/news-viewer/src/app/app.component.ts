@@ -12,6 +12,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule} from "@angular/material/divider";
+import {MatFormFieldModule } from "@angular/material/form-field";
+import {MatSelectModule} from "@angular/material/select";
 
 @Component({
   selector: 'app-root',
@@ -23,6 +25,8 @@ import { MatDividerModule} from "@angular/material/divider";
     MatProgressBarModule,
     MatIconModule,
     MatDividerModule,
+    MatFormFieldModule,
+    MatSelectModule,
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
@@ -30,10 +34,14 @@ import { MatDividerModule} from "@angular/material/divider";
 export class AppComponent implements OnInit, OnDestroy {
   newsItems: NewsItem[] = [];
   connected = false;
+  pollingInterval = 60;
+  intervals = [10, 20, 30, 40, 50, 60];
+
   private eventSource?: EventSource;
 
   ngOnInit() {
     this.connectSSE('/news');
+    this.loadCurrentInterval();
   }
 
   ngOnDestroy() {
@@ -81,4 +89,24 @@ export class AppComponent implements OnInit, OnDestroy {
   trackByTitle(index: number, item: NewsItem): string {
     return item.title;
   }
+
+  loadCurrentInterval() {
+    fetch('/config/polling-interval')
+      .then(r => r.json())
+      .then(value => {
+        if (typeof value === 'number') {
+          this.pollingInterval = value;
+        }
+      })
+      .catch(() => {});
+  }
+
+  changeInterval(seconds: number) {
+    this.pollingInterval = seconds;
+    const params = new URLSearchParams({ seconds: String(seconds) });
+    fetch('/config/polling-interval?' + params.toString(), {
+      method: 'POST'
+    }).catch(() => {});
+  }
+
 }
