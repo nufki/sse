@@ -1,0 +1,101 @@
+.toolbar-row {
+  display: flex;
+  align-items: center; /* vertical only */
+}
+
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toolbar-spacer {
+  flex: 1 1 auto; /* pushes dropdown to the right */
+}
+
+.app-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-align: left;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.status.connected {
+  color: #05ea0b;
+}
+
+.status.disconnected {
+  color: #c50316;
+}
+
+.status-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+.interval-field {
+  width: 140px;
+}
+
+/* space between cards */
+.news-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px; /* try 16–24px; tweak to taste */
+}
+
+/* if you prefer, you can go a bit more generous */
+@media (min-width: 768px) {
+  .news-list {
+    gap: 20px;
+  }
+}
+
+
+.news-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.news-header-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.news-title {
+  flex: 1;
+  font-weight: 600;
+}
+
+.news-meta {
+  font-size: 0.8rem;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.news-timestamp {
+  white-space: nowrap;
+}
+
+.news-badge {
+  background-color: #ff6f00;
+  color: #fff;
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+

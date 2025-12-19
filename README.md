@@ -30,37 +30,44 @@ A minimal **Angular** frontend (served as static content by Spring Boot) consume
 - Globally set interval:
 
   ```bash
-  curl -X POST "localhost:8085/config/polling-interval?seconds=30"
+  curl -X POST "localhost:8099/config/polling-interval?seconds=30"
   ```
 
 - Fetch current poll interval:
 
   ```bash
-  curl "localhost:8085/config/polling-interval"
+  curl "localhost:8099/config/polling-interval"
   ```
 
 - Fetch number of active client sessions:
 
   ```bash
-  curl "localhost:8085/clients"
+  curl "localhost:8099/clients"
   ```
 ---
 
 
 # Load test queries..
   ```bash
-    # List all curl processes hitting 8085/news
-    ps aux | grep "[c]url.*8085/news"
+    # List all curl processes hitting 8099/news
+    ps aux | grep "[c]url.*8099/news"
     
     # OR count them
-    ps aux | grep -c "[c]url.*8085/news"
+    ps aux | grep -c "[c]url.*8099/news"
     
     # Detailed list with PIDs
-    pgrep -f "curl.*8085/news" -l
+    pgrep -f "curl.*8099/news" -l
     
     # Watch in real-time
-    watch -n 1 'ps aux | grep "[c]url.*8085/news" | wc -l'
+    watch -n 1 'ps aux | grep "[c]url.*8099/news" | wc -l'
     
     # Kill them all
-    pkill -f "curl.*8085/news"    
+    pkill -f "curl.*8099/news"
+    
+    # Kill spring boot application in case of termination issues
+    pkill -f "java.*spring"
+    
   ```
+
+# UI Screenshot
+![img.png](img.png)

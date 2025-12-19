@@ -61,6 +61,15 @@ public class NewsController {
 
         emitters.add(emitter);
 
+        // Send immediate data using your existing method
+        try {
+            List<NewsItem> headlines = newsApiClient.fetchTopHeadlines();
+            headlines.forEach(item -> dispatchNewsItemToSingle(item, emitter));  // Immediate!
+            log.info("Sent {} cached headlines to new client", headlines.size());
+        } catch (Exception e) {
+            log.warn("Failed initial data send", e);
+        }
+
         emitter.onCompletion(() -> {
             emitters.remove(emitter);
             log.info("Client disconnected (remaining: {})", emitters.size());
@@ -75,6 +84,17 @@ public class NewsController {
         });
 
         return emitter;
+    }
+
+    private void dispatchNewsItemToSingle(NewsItem item, SseEmitter singleEmitter) {
+        try {
+            singleEmitter.send(SseEmitter.event()
+                    .name("NEWS")
+                    .data(item));
+        } catch (IOException e) {
+            log.debug("Failed initial send to new client");
+            singleEmitter.complete();
+        }
     }
 
     private void dispatchNewsItem(NewsItem item) {
