@@ -1,0 +1,81 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row class="toolbar-row">
+    <div class="toolbar-left">
+      <span class="app-title">News Viewer</span>
+
+      <div
+        class="status"
+        [class.connected]="(connected$ | async) === true"
+        [class.disconnected]="(connected$ | async) !== true"
+      >
+        <mat-icon class="status-icon">wifi</mat-icon>
+        <span class="status-text">
+          {{ (connected$ | async) ? 'Live' : 'Offline' }}
+        </span>
+      </div>
+    </div>
+
+    <span class="toolbar-spacer"></span>
+
+    <mat-form-field appearance="outline" class="interval-field">
+      <mat-label>Refresh</mat-label>
+      <mat-select
+        [value]="(pollingIntervalSeconds$ | async) ?? intervalOptions.at(-1)!"
+        (selectionChange)="setInterval($event.value)"
+      >
+        @for (i of intervalOptions; track i) {
+          <mat-option [value]="i">{{ i }}s</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<main class="page">
+  <div class="content">
+    @if (items$ | async; as items) {
+
+      @if (!items.length) {
+        <div class="empty-state">
+          <mat-icon>campaign</mat-icon>
+          <span>No news available</span>
+        </div>
+      }
+
+      <section class="news-list">
+        @for (n of items; track n.title; let i = $index) {
+          <mat-card
+            class="news-card"
+            [class.news-card--alt]="i % 2 === 1"
+            appearance="outlined"
+          >
+            <mat-card-header class="news-header">
+              <div class="news-header-main">
+                <mat-card-title class="news-title">
+                  {{ n.title }}
+                </mat-card-title>
+
+                @if (isNew(n)) {
+                  <span class="news-badge">NEW</span>
+                }
+              </div>
+
+              <div class="news-meta">
+                <span class="news-timestamp">
+                  {{ n.timestamp | date: 'yyyy-MM-dd\'T\'HH:mm:ss\'Z\'' }}
+                </span>
+              </div>
+            </mat-card-header>
+
+            @if (n.content) {
+              <mat-card-content class="news-content">
+                <p>{{ n.content }}</p>
+              </mat-card-content>
+            }
+          </mat-card>
+        }
+      </section>
+    }
+  </div>
+</main>
+

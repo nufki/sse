@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import {NewsComponent} from "./news/news";
+import {Component} from '@angular/core';
+import {NewsComponent} from "./news/news/news.component";
 
 @Component({
   selector: 'app-root',
@@ -8,4 +8,5 @@ import {NewsComponent} from "./news/news";
   template: `<app-news></app-news>`,
   styleUrl: './app.css'   // keep if you have global styles
 })
-export class App {}
+export class App {
+}
