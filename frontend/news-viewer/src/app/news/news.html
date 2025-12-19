@@ -1,0 +1,51 @@
+<mat-toolbar color="primary" class="toolbar">
+  <div class="toolbar-left">
+    <span class="app-title">News Viewer</span>
+  </div>
+
+  <div class="toolbar-right">
+    <div class="status" [class.connected]="connected()" [class.disconnected]="!connected()">
+      <span class="status-dot"></span>
+      <span class="status-text">
+        @if (connected()) { Connected } @else { Disconnected }
+      </span>
+    </div>
+
+    <mat-form-field appearance="outline" class="interval-field">
+      <mat-label>Polling interval</mat-label>
+      <mat-select
+        [value]="pollingInterval()"
+        (selectionChange)="changeInterval($event.value)"
+      >
+        @for (i of intervals(); track i) {
+          <mat-option [value]="i">
+            {{ i }} seconds
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+</mat-toolbar>
+
+<main class="page">
+  <mat-divider></mat-divider>
+
+  <section class="news-list">
+    @for (n of newsItems(); track trackByTitle($index, n)) {
+      <mat-card class="news-card">
+        <mat-card-header>
+          <mat-card-title>
+            @if (isNew(n)) {
+              <span class="new-badge">NEW</span>
+            }
+            {{ n.title }}
+          </mat-card-title>
+          <mat-card-subtitle>{{ n.timestamp }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          {{ n.content }}
+        </mat-card-content>
+      </mat-card>
+    }
+  </section>
+</main>
