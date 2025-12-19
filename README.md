@@ -68,3 +68,6 @@ A minimal **Angular** frontend (served as static content by Spring Boot) consume
     pkill -f "java.*spring"
     
   ```
+
+# UI Screenshot
+![img.png](img.png)
