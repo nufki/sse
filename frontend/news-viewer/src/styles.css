@@ -1,1 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
+/* Custom elements */
+.news-badge {
+  background-color: var(--mat-sys-primary);        /* themed primary */
+  color: var(--mat-sys-on-primary);                /* readable text */
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
