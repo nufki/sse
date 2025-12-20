@@ -72,11 +72,13 @@ A minimal **Angular** frontend (served as static content by Spring Boot) consume
 # UI Screenshot
 ![img.png](img.png)
 
-# BUILD DOCKER
+# Standalone mode... (taking out the app in the resources/static/* folder prior running... )
   ```bash
+    # Build and run backend
     docker build -t news-viewer-backend .
     docker run --rm -p 8099:8099 news-viewer-backend
     
+    # cd into frontend/news-viewer --> Build and run frontend
     docker build -t news-viewer-frontend .
     docker run --rm -p 8080:80 news-viewer-frontend
     
