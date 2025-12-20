@@ -9,3 +9,7 @@ export enum ConnectionStatus {
   Connecting = 'connecting',
   Connected = 'connected',
 }
+
+export interface PollingIntervalResponse {
+  pollingIntervalSeconds: number;
+}
