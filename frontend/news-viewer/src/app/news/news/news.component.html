@@ -1,16 +1,16 @@
-<mat-toolbar color="primary">
+<mat-toolbar color="secondary">
   <mat-toolbar-row class="toolbar-row">
     <div class="toolbar-left">
       <span class="app-title">News Viewer</span>
 
       <div
         class="status"
-        [class.connected]="(connected$ | async) === true"
-        [class.disconnected]="(connected$ | async) !== true"
+        [class.connected]="connected()"
+        [class.disconnected]="!connected()"
       >
         <mat-icon class="status-icon">wifi</mat-icon>
         <span class="status-text">
-          {{ (connected$ | async) ? 'Live' : 'Offline' }}
+          {{ connected() ? 'Live' : 'Offline' }}
         </span>
       </div>
     </div>
@@ -20,7 +20,7 @@
     <mat-form-field appearance="outline" class="interval-field">
       <mat-label>Refresh</mat-label>
       <mat-select
-        [value]="(pollingIntervalSeconds$ | async) ?? intervalOptions.at(-1)!"
+        [value]="pollingIntervalSeconds() ?? intervalOptions[intervalOptions.length - 1]"
         (selectionChange)="setInterval($event.value)"
       >
         @for (i of intervalOptions; track i) {
@@ -33,7 +33,7 @@
 
 <main class="page">
   <div class="content">
-    @if (items$ | async; as items) {
+    @if (items(); as items) {
 
       @if (!items.length) {
         <div class="empty-state">
@@ -78,4 +78,3 @@
     }
   </div>
 </main>
-

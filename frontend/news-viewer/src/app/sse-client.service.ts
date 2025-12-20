@@ -1,12 +1,12 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class SseClientService {
   streamJson<T>(
     url: string,
     eventNames: string[] = ['message'],
-    debugLabel = 'SSE'
+    debugLabel = 'SSE',
   ): Observable<T> {
     return new Observable<T>((subscriber) => {
       console.log(`[${debugLabel}] opening`, url, 'events:', eventNames);

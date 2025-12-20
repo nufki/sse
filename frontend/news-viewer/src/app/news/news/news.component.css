@@ -1,6 +1,6 @@
 .toolbar-row {
   display: flex;
-  align-items: center; /* vertical only */
+  align-items: center;
 }
 
 .toolbar-left {
@@ -10,13 +10,14 @@
 }
 
 .toolbar-spacer {
-  flex: 1 1 auto; /* pushes dropdown to the right */
+  flex: 1 1 auto;
 }
 
 .app-title {
   font-size: 1.25rem;
   font-weight: 600;
   text-align: left;
+  color: var(--mat-sys-primary);
 }
 
 .status {
@@ -26,15 +27,19 @@
   padding: 4px 10px;
   border-radius: 999px;
   font-size: 0.8rem;
-  background: rgba(255, 255, 255, 0.14);
+  background: color-mix(in srgb,
+  var(--mat-sys-on-primary) 14%,
+  transparent
+  );
+color: var(--mat-sys-on-primary);
 }
 
 .status.connected {
-  color: #05ea0b;
+  color: #07f610;
 }
 
 .status.disconnected {
-  color: #c50316;
+  color: var(--mat-sys-error);
 }
 
 .status-icon {
@@ -47,20 +52,17 @@
   width: 140px;
 }
 
-/* space between cards */
 .news-list {
   display: flex;
   flex-direction: column;
-  gap: 16px; /* try 16–24px; tweak to taste */
+  gap: 16px;
 }
 
-/* if you prefer, you can go a bit more generous */
 @media (min-width: 768px) {
   .news-list {
     gap: 20px;
   }
 }
-
 
 .news-header {
   display: flex;
@@ -78,24 +80,14 @@
 .news-title {
   flex: 1;
   font-weight: 600;
+  color: var(--mat-sys-on-surface);
 }
 
 .news-meta {
   font-size: 0.8rem;
-  color: rgba(0, 0, 0, 0.54);
+  color: var(--mat-sys-on-surface-variant);
 }
 
 .news-timestamp {
   white-space: nowrap;
 }
-
-.news-badge {
-  background-color: #ff6f00;
-  color: #fff;
-  border-radius: 999px;
-  padding: 2px 8px;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-}
-

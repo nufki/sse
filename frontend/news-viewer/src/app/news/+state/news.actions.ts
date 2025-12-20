@@ -1,5 +1,5 @@
-import {createActionGroup, emptyProps, props} from '@ngrx/store';
-import {NewsItem} from './news.models';
+import { createActionGroup, emptyProps, props } from '@ngrx/store';
+import { NewsItem } from './news.models';
 
 export const NewsActions = createActionGroup({
   source: 'News',
@@ -7,13 +7,13 @@ export const NewsActions = createActionGroup({
     'Page Entered': emptyProps(),
     'Page Left': emptyProps(),
 
-    'Connect': emptyProps(),
-    'Disconnect': emptyProps(),
+    Connect: emptyProps(),
+    Disconnect: emptyProps(),
 
-    'Connected': emptyProps(),
-    'Disconnected': emptyProps(),
+    Connected: emptyProps(),
+    Disconnected: emptyProps(),
     'Message Received': props<{ item: NewsItem }>(),
-    'Error': props<{ error: string }>(),
+    Error: props<{ error: string }>(),
 
     'Load Polling Interval': emptyProps(),
     'Load Polling Interval Success': props<{ seconds: number }>(),
