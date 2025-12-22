@@ -13,11 +13,9 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> {}) // enable Spring MVC CORS configuration
+                .cors(cors -> {}) // keep CORS enabled
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/news").permitAll()
-                        .requestMatchers("/config/**").permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 );
 
         return http.build();
