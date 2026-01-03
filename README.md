@@ -48,7 +48,13 @@ A minimal **Angular** frontend (served as static content by Spring Boot) consume
 
 
 # Load test queries..
+To simulate the performance of the SSE (especially the server side that uses virtual threads)
+a performance test can be carried out that spans 500+ sessions to the server that simulates multiple concurrent connections.
+
   ```bash
+    # start the performance test
+    ./load-test.sh
+    
     # List all curl processes hitting 8099/news
     ps aux | grep "[c]url.*8099/news"
     
@@ -69,11 +75,14 @@ A minimal **Angular** frontend (served as static content by Spring Boot) consume
     
   ```
 
-# UI Screenshot
+# Visualization of the news reader...
 ![img.png](img.png)
 
-# Standalone mode... (taking out the app in the resources/static/* folder prior running... )
-  ```bash
+# Standalone mode...
+Building and running the docker images.
+Note: Before doing this, consider taking the app out of the static content from tomcat:  e.g. removing resources/static/* prior running... )
+ 
+```bash
     # Build and run backend
     docker build -t news-viewer-backend .
     docker run --rm -p 8099:8099 news-viewer-backend
