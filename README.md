@@ -14,7 +14,7 @@ A minimal **Angular** frontend (served as static content by Spring Boot) consume
   - Exposes `/config/polling-interval` (GET/POST) to read and update the polling interval and `/stream-sse` as a minimal example SSE endpoint (from the original Medium article).
 
 - **Angular frontend**
-  - Standalone Angular 18 app with Angular Material.
+  - Standalone Angular 21 app with Angular Material.
   - Connects to `/news` using `EventSource` 
   - Provides a toolbar dropdown to change the backend polling interval (10–60 seconds in 10‑second steps) by calling `/config/polling-interval`.
 ---
